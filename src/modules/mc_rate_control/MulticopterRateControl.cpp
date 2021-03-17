@@ -125,7 +125,7 @@ MulticopterRateControl::Run()
 		// grab corresponding vehicle_angular_acceleration immediately after vehicle_angular_velocity copy
 		vehicle_angular_acceleration_s v_angular_acceleration{};
 		_vehicle_angular_acceleration_sub.copy(&v_angular_acceleration);
-
+		manual_control_setpoint_s manual_control_setpoint;
 		const hrt_abstime now = angular_velocity.timestamp_sample;
 
 		// Guard against too small (< 0.125ms) and too large (> 20ms) dt's.
@@ -161,7 +161,7 @@ MulticopterRateControl::Run()
 
 		if (_v_control_mode.flag_control_manual_enabled && !_v_control_mode.flag_control_attitude_enabled) {
 			// generate the rate setpoint from sticks
-			manual_control_setpoint_s manual_control_setpoint;
+
 
 			if (_manual_control_setpoint_sub.update(&manual_control_setpoint)) {
 				// manual rates control - ACRO mode
@@ -227,6 +227,37 @@ MulticopterRateControl::Run()
 			rate_ctrl_status.timestamp = hrt_absolute_time();
 			_controller_status_pub.publish(rate_ctrl_status);
 
+			actuator_controls_s actuators{};
+
+				/* publish actuator controls */
+
+		  		  float thrust_ip = (PX4_ISFINITE(_thrust_sp)) ? _thrust_sp : 0.0f;
+				  float m1 = thrust_ip -att_control(0) + att_control(1) + att_control(2);
+				  float m2 = -thrust_ip + att_control(0) + att_control(1) + att_control(2);
+				  float m3 = thrust_ip + att_control(0) - att_control(1) + att_control(2);
+				  float m4 = -thrust_ip - att_control(0) - att_control(1) +att_control(2);
+					
+				  	/* publish actuator controls */
+				//if(_v_control_mode.flag_armed){ 
+				  actuators.control[actuator_controls_s::INDEX_ROLL] = _param_vpq_s1n.get()  + _param_vpq_s1s.get() * m1;
+				  actuators.control[actuator_controls_s::INDEX_PITCH] = _param_vpq_s2n.get()  + _param_vpq_s2s.get()*m2;
+				  actuators.control[actuator_controls_s::INDEX_YAW] = _param_vpq_s3n.get() + _param_vpq_s3s.get()*m3;
+				  actuators.control[actuator_controls_s::INDEX_THROTTLE] = _param_vpq_s4n.get()  + _param_vpq_s4s.get()*m4; 
+				  actuators.control[actuator_controls_s::INDEX_FLAPS] = manual_control_setpoint.flaps; 
+				  actuators.timestamp_sample = angular_velocity.timestamp_sample;
+			/**	}else{
+
+			          actuators.control[actuator_controls_s::INDEX_ROLL] = 0.0f;
+				  actuators.control[actuator_controls_s::INDEX_PITCH] = 0.0f;
+				  actuators.control[actuator_controls_s::INDEX_YAW] = 0.0f;
+				  actuators.control[actuator_controls_s::INDEX_THROTTLE] = 0.0f;
+				  actuators.control[actuator_controls_s::INDEX_FLAPS] = 0.0f; 
+				  actuators.timestamp_sample = angular_velocity.timestamp_sample;
+				}
+
+
+
+
 			// publish actuator controls
 			actuator_controls_s actuators{};
 			actuators.control[actuator_controls_s::INDEX_ROLL] = PX4_ISFINITE(att_control(0)) ? att_control(0) : 0.0f;
@@ -235,7 +266,7 @@ MulticopterRateControl::Run()
 			actuators.control[actuator_controls_s::INDEX_THROTTLE] = PX4_ISFINITE(_thrust_sp) ? _thrust_sp : 0.0f;
 			actuators.control[actuator_controls_s::INDEX_LANDING_GEAR] = _landing_gear;
 			actuators.timestamp_sample = angular_velocity.timestamp_sample;
-
+**/
 			// scale effort by battery status if enabled
 			if (_param_mc_bat_scale_en.get()) {
 				if (_battery_status_sub.updated()) {
