@@ -395,3 +395,13 @@ PARAM_DEFINE_FLOAT(MC_ACRO_SUPEXPOY, 0.7f);
  * @group Multicopter Rate Control
  */
 PARAM_DEFINE_INT32(MC_BAT_SCALE_EN, 0);
+
+// heli swash params
+PARAM_DEFINE_FLOAT(VPQ_S1N, 0.0f);   //0.054 gasser
+PARAM_DEFINE_FLOAT(VPQ_S2N, 0.0f);   //0.006 gasser
+PARAM_DEFINE_FLOAT(VPQ_S3N, 0.0f);   //0.006 gasser
+PARAM_DEFINE_FLOAT(VPQ_S4N, 0.0f);   //0.0   gasser
+PARAM_DEFINE_FLOAT(VPQ_S1S, 1.0f); // swash servo 1 direction
+PARAM_DEFINE_FLOAT(VPQ_S2S, 1.0f); // swash servo 2 direction
+PARAM_DEFINE_FLOAT(VPQ_S3S, 1.0f); // swash servo 3 direction
+PARAM_DEFINE_FLOAT(VPQ_S4S, 1.0f); // yaw servo direction
