@@ -238,14 +238,14 @@ MulticopterRateControl::Run()
 				  float m4 = -thrust_ip - att_control(0) - att_control(1) +att_control(2);
 					
 				  	/* publish actuator controls */
-				//if(_v_control_mode.flag_armed){ 
+				if(_v_control_mode.flag_armed){ 
 				  actuators.control[actuator_controls_s::INDEX_ROLL] = _param_vpq_s1n.get()  + _param_vpq_s1s.get() * m1;
 				  actuators.control[actuator_controls_s::INDEX_PITCH] = _param_vpq_s2n.get()  + _param_vpq_s2s.get()*m2;
 				  actuators.control[actuator_controls_s::INDEX_YAW] = _param_vpq_s3n.get() + _param_vpq_s3s.get()*m3;
 				  actuators.control[actuator_controls_s::INDEX_THROTTLE] = _param_vpq_s4n.get()  + _param_vpq_s4s.get()*m4; 
 				  actuators.control[actuator_controls_s::INDEX_FLAPS] = manual_control_setpoint.flaps; 
 				  actuators.timestamp_sample = angular_velocity.timestamp_sample;
-			/**	}else{
+				}else{
 
 			          actuators.control[actuator_controls_s::INDEX_ROLL] = 0.0f;
 				  actuators.control[actuator_controls_s::INDEX_PITCH] = 0.0f;
@@ -259,7 +259,7 @@ MulticopterRateControl::Run()
 
 
 			// publish actuator controls
-			actuator_controls_s actuators{};
+		/**	actuator_controls_s actuators{};
 			actuators.control[actuator_controls_s::INDEX_ROLL] = PX4_ISFINITE(att_control(0)) ? att_control(0) : 0.0f;
 			actuators.control[actuator_controls_s::INDEX_PITCH] = PX4_ISFINITE(att_control(1)) ? att_control(1) : 0.0f;
 			actuators.control[actuator_controls_s::INDEX_YAW] = PX4_ISFINITE(att_control(2)) ? att_control(2) : 0.0f;
