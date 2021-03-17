@@ -127,6 +127,16 @@ private:
 	int8_t _landing_gear{landing_gear_s::GEAR_DOWN};
 
 	DEFINE_PARAMETERS(
+
+		(ParamFloat<px4::params::VPQ_S1N>) _param_vpq_s1n,
+		(ParamFloat<px4::params::VPQ_S2N>) _param_vpq_s2n,
+		(ParamFloat<px4::params::VPQ_S3N>) _param_vpq_s3n,
+		(ParamFloat<px4::params::VPQ_S4N>) _param_vpq_s4n,
+		(ParamFloat<px4::params::VPQ_S1S>) _param_vpq_s1s,
+		(ParamFloat<px4::params::VPQ_S2S>) _param_vpq_s2s,
+		(ParamFloat<px4::params::VPQ_S3S>) _param_vpq_s3s,
+		(ParamFloat<px4::params::VPQ_S4S>) _param_vpq_s4s,
+
 		(ParamFloat<px4::params::MC_ROLLRATE_P>) _param_mc_rollrate_p,
 		(ParamFloat<px4::params::MC_ROLLRATE_I>) _param_mc_rollrate_i,
 		(ParamFloat<px4::params::MC_RR_INT_LIM>) _param_mc_rr_int_lim,
