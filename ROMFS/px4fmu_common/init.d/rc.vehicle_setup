@@ -32,6 +32,35 @@ then
 	. ${R}etc/init.d/rc.fw_apps
 fi
 
+
+#
+if [ $VEHICLE_TYPE = vp_quad ]
+then
+	if [ $MIXER = none ]
+	then
+		# Set default mixer for fixed wing if not defined.
+		set vp_quad
+	fi
+
+	if [ $MAV_TYPE = none ]
+	then
+		# Set a default MAV_TYPE = 1 if not defined.
+		echo "[i] Ram D QUAD"
+		set MAV_TYPE 2
+	fi
+
+	# Set the mav type parameter.
+	param set MAV_TYPE ${MAV_TYPE}
+
+	# Load mixer and configure outputs.
+	. ${R}etc/init.d/rc.interface
+
+	# Start standard multicopter apps.
+	. ${R}etc/init.d/rc.mc_apps
+fi
+
+
+
 #
 # Multicopter setup.
 #
